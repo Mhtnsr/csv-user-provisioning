@@ -1,50 +1,35 @@
-# Csv User Provisioning
+# CSV user provisioning plans
 
-Validate synthetic user CSVs and produce reviewable provisioning plans before directory changes.
+Validate a user CSV before it becomes a directory change. This Python tool produces a JSON plan; it does **not** create accounts or connect to AD/Entra ID.
 
-**Owner:** [Mahamat Nassour Ahmat](https://github.com/Mhtnsr) · IT Support Specialist → Systems Administrator
+## Input contract
 
-## Problem
+The exact header is:
 
-Bulk input errors propagate into identity changes.
+```csv
+username,given_name,surname,department
+lab.user01,Alex,Example,Lab
+```
 
-## Solution
+Usernames are normalized to lowercase. The validator rejects duplicate usernames, missing/extra columns, malformed CSV quoting, empty fields, control characters, oversized fields, and formula-like prefixes. The synthetic input is in [examples/users.csv](examples/users.csv).
 
-Validate an exact synthetic CSV schema, normalize usernames, reject duplicates/formula-like/control-character fields, and emit a JSON plan with disabled accounts. The plan is a review artifact; it does not create users.
+## Run
 
-## Usage
-
-Run from the repository root. Use an isolated, authorized environment and inspect source before execution.
+Python 3.10+; no third-party dependencies. From the repository root:
 
 ```bash
 python scripts/csv_plan.py examples/users.csv
 python -m unittest discover -s tests -v
 ```
 
-## Validation and limits
+A valid input produces `mode: plan-only` and `enabled: false` for each proposed account. An invalid input exits with code 2 and a generic error; raw input rows and local file paths are not printed. [Synthetic output](examples/plan.synthetic.json).
 
-Python standard library only. Fixture-based validation tests passed. Live provisioning is deliberately not implemented; an approved adapter with uniqueness checks, domain validation, error handling, and rollback would be required.
+## Why stop at a plan?
 
-## Screenshots and evidence
+Input validation can be tested without granting directory access. A future provisioning adapter would still need server-side uniqueness checks, approved OU/domain targeting, authorization, per-account results, and recovery handling. A valid CSV alone is not approval to create an account.
 
-[Evidence checklist](evidence/README.md). Placeholder: add a sanitized capture of the actual execution or lab result here after validation. No screenshots or outcomes are fabricated.
+## What was checked
 
-<!-- Example after creating the file: ![Sanitized lab result](evidence/lab-result.png) -->
+[Validation record](docs/validation.md) includes deterministic fixtures and an actual CLI run using the synthetic CSV. No live users or employee exports were used. The current tool does not check whether an account already exists in a directory.
 
-## Repository map
-
-Source belongs in `scripts/`, reproducible checks in `tests/`, synthetic inputs in `examples/`, design notes in `docs/`, reusable records in `templates/`, and sanitized proof in `evidence/`. Only directories relevant to this project are created.
-
-## Next steps
-
-- Capture a reproducible lab run with expected versus observed behavior.
-- Document failure cases and recovery or escalation.
-- Update validation status only after recording actual results.
-
-## Security
-
-See [SECURITY.md](SECURITY.md). No company data, credentials, internal topology, or live ticket details belong here.
-
-## License
-
-[MIT](LICENSE). A personal learning project; not affiliated with or endorsed by USEReady, Microsoft, CompTIA, or other vendors.
+[Evidence index](evidence/README.md) · [MIT license](LICENSE) · [Security](SECURITY.md)

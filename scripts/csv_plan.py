@@ -8,7 +8,7 @@ import sys
 FIELDS = ['username', 'given_name', 'surname', 'department']
 
 def build_plan(stream):
-    reader = csv.DictReader(stream)
+    reader = csv.DictReader(stream, strict=True)
     if reader.fieldnames != FIELDS:
         raise ValueError('Expected exact header: ' + ','.join(FIELDS))
     seen, users = set(), []

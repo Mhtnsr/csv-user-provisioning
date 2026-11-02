@@ -1,4 +1,5 @@
 import io
+import csv
 from pathlib import Path
 import sys
 import unittest
@@ -10,6 +11,9 @@ class CsvPlanTests(unittest.TestCase):
         plan=build_plan(io.StringIO(HEADER+'LAB.User01,Alex,Example,Lab\n'))
         self.assertEqual(plan['users'][0]['username'],'lab.user01')
         self.assertIs(plan['users'][0]['enabled'],False)
+    def test_unclosed_quote_rejected(self):
+        with self.assertRaises(csv.Error):
+            build_plan(io.StringIO(HEADER+'user,Alex,Example,"Lab'))
     def test_rejected_inputs(self):
         cases=['username,password\nu,secret\n',HEADER,HEADER+'bad;id,A,B,Lab\n',
                HEADER+'user,A,B,Lab\nUSER,A,B,Lab\n',HEADER+'user,=formula,B,Lab\n',
