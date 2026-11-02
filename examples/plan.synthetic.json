@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "mode": "plan-only",
+  "users": [
+    {
+      "username": "lab.user01",
+      "given_name": "Alex",
+      "surname": "Example",
+      "department": "Lab",
+      "enabled": false
+    },
+    {
+      "username": "lab.user02",
+      "given_name": "Sam",
+      "surname": "Sample",
+      "department": "Lab",
+      "enabled": false
+    }
+  ]
+}
