@@ -33,3 +33,9 @@ Input validation can be tested without granting directory access. A future provi
 [Validation record](docs/validation.md) includes deterministic fixtures and an actual CLI run using the synthetic CSV. No live users or employee exports were used. The current tool does not check whether an account already exists in a directory.
 
 [Evidence index](evidence/README.md) · [MIT license](LICENSE) · [Security](SECURITY.md)
+
+## Automated checks
+
+[CI configuration and limits](docs/ci.md) · [Latest workflow runs](https://github.com/Mhtnsr/csv-user-provisioning/actions/workflows/checks.yml)
+
+[Recorded passing run — November 7, 2026](docs/ci-results-2026-11-07.md).
